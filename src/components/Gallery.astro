@@ -1,0 +1,109 @@
+---
+import { Image, getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  images: ImageMetadata[];
+  title: string;
+}
+
+const { images, title } = Astro.props;
+
+// Pre-render an optimized large version of each photo for the lightbox.
+const fullSize = await Promise.all(
+  images.map((img) => getImage({ src: img, width: 1600, format: 'webp' })),
+);
+---
+
+<div class="grid grid-cols-2 gap-3 sm:grid-cols-3">
+  {
+    images.map((img, i) => (
+      <button
+        class="gallery-thumb overflow-hidden bg-cream-deep"
+        data-full={fullSize[i].src}
+        data-index={i}
+        aria-label={`View photo ${i + 1} larger`}
+      >
+        <Image
+          src={img}
+          alt={`${title} — photo ${i + 1}`}
+          widths={[300, 600]}
+          sizes="(max-width: 640px) 50vw, 33vw"
+          class="aspect-square w-full cursor-pointer object-cover transition-transform duration-500 hover:scale-105"
+        />
+      </button>
+    ))
+  }
+</div>
+
+<!-- Lightbox overlay (hidden until a photo is clicked) -->
+<div
+  id="lightbox"
+  class="fixed inset-0 z-50 hidden items-center justify-center bg-bark/95 p-4"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Photo viewer"
+>
+  <button
+    id="lb-close"
+    class="absolute top-5 right-6 text-3xl text-cream"
+    aria-label="Close">&times;</button
+  >
+  <button
+    id="lb-prev"
+    class="absolute left-4 text-4xl text-cream sm:left-8"
+    aria-label="Previous photo">&lsaquo;</button
+  >
+  <img id="lb-image" class="max-h-[85vh] max-w-[90vw] object-contain" alt="" />
+  <button
+    id="lb-next"
+    class="absolute right-4 text-4xl text-cream sm:right-8"
+    aria-label="Next photo">&rsaquo;</button
+  >
+</div>
+
+<script>
+  const thumbs = Array.from(
+    document.querySelectorAll<HTMLButtonElement>('.gallery-thumb'),
+  );
+  const sources = thumbs.map((t) => t.dataset.full || '');
+  const lightbox = document.getElementById('lightbox')!;
+  const image = document.getElementById('lb-image') as HTMLImageElement;
+  let current = 0;
+
+  const show = (i: number) => {
+    current = (i + sources.length) % sources.length;
+    image.src = sources[current];
+  };
+
+  const open = (i: number) => {
+    show(i);
+    lightbox.classList.remove('hidden');
+    lightbox.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+  };
+
+  const close = () => {
+    lightbox.classList.add('hidden');
+    lightbox.classList.remove('flex');
+    document.body.style.overflow = '';
+  };
+
+  thumbs.forEach((t, i) => t.addEventListener('click', () => open(i)));
+  document.getElementById('lb-close')!.addEventListener('click', close);
+  document
+    .getElementById('lb-prev')!
+    .addEventListener('click', () => show(current - 1));
+  document
+    .getElementById('lb-next')!
+    .addEventListener('click', () => show(current + 1));
+  lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) close();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (lightbox.classList.contains('hidden')) return;
+    if (e.key === 'Escape') close();
+    if (e.key === 'ArrowLeft') show(current - 1);
+    if (e.key === 'ArrowRight') show(current + 1);
+  });
+</script>

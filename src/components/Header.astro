@@ -1,0 +1,72 @@
+---
+import { site, nav } from '../site';
+
+const path = Astro.url.pathname;
+const isActive = (href: string) =>
+  href === '/' ? path === '/' : path.startsWith(href);
+---
+
+<header class="border-b border-cream-deep">
+  <div class="mx-auto flex max-w-6xl items-center justify-between px-5 py-5">
+    <a href="/" class="font-serif text-2xl tracking-tight">{site.name}</a>
+
+    <!-- Desktop nav -->
+    <nav class="hidden gap-8 text-sm tracking-wide uppercase md:flex">
+      {
+        nav.map((item) => (
+          <a
+            href={item.href}
+            class:list={[
+              'transition-colors hover:text-forest',
+              isActive(item.href) ? 'text-forest' : 'text-bark-soft',
+            ]}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <!-- Mobile menu button -->
+    <button
+      id="menu-toggle"
+      class="md:hidden"
+      aria-label="Open menu"
+      aria-expanded="false"
+    >
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <line x1="3" y1="7" x2="21" y2="7"></line>
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="17" x2="21" y2="17"></line>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Mobile nav -->
+  <nav id="mobile-nav" class="hidden border-t border-cream-deep md:hidden">
+    <div class="mx-auto flex max-w-6xl flex-col px-5 py-2">
+      {
+        nav.map((item) => (
+          <a
+            href={item.href}
+            class:list={[
+              'py-3 text-sm tracking-wide uppercase',
+              isActive(item.href) ? 'text-forest' : 'text-bark-soft',
+            ]}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </div>
+  </nav>
+</header>
+
+<script>
+  const toggle = document.getElementById('menu-toggle');
+  const mobileNav = document.getElementById('mobile-nav');
+  toggle?.addEventListener('click', () => {
+    const open = mobileNav?.classList.toggle('hidden') === false;
+    toggle.setAttribute('aria-expanded', String(open));
+  });
+</script>
