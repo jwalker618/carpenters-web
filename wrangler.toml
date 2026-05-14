@@ -1,7 +1,10 @@
-# Cloudflare Pages configuration.
-# The site is fully static, so this only needs to point Cloudflare at the
-# build output folder. Build command and Node version are set in the
-# Cloudflare Pages dashboard (see README.md → Deployment).
+# Cloudflare deployment config.
+# The site is fully static. Cloudflare's Git build runs `npx wrangler deploy`,
+# so this uses the Workers Static Assets format: it just uploads the built
+# `dist/` folder. Build command (`npm run build`) and Node version are set in
+# the Cloudflare dashboard — see README.md → Deployment.
 name = "carpenters-web"
-pages_build_output_dir = "dist"
 compatibility_date = "2025-05-01"
+
+[assets]
+directory = "./dist"

@@ -140,18 +140,17 @@ GitHub is the deploy.
 ### First-time hosting setup (done once)
 
 1. Sign in at [Cloudflare](https://dash.cloudflare.com) → **Workers & Pages**
-   → **Create** → **Pages** → **Connect to Git**, and pick this repository.
+   → **Create** → **Import a repository**, and pick this repository.
 2. Set the build settings:
-   - **Framework preset:** Astro
    - **Build command:** `npm run build`
-   - **Build output directory:** `dist`
+   - **Deploy command:** `npx wrangler deploy` (Cloudflare's default)
    - **Environment variable:** add `NODE_VERSION` = `22`
 3. Click **Save and Deploy**. Cloudflare gives you a free
-   `…pages.dev` address. You can add your own domain name later under the
-   project's **Custom domains** tab.
+   `…workers.dev` address. You can add your own domain name later under the
+   project's **Domains & Routes** tab.
 
-(The `wrangler.toml` file in this project already tells Cloudflare where the
-built site lives — you don't need to touch it.)
+(The `wrangler.toml` file in this project already tells Cloudflare to upload
+the built `dist/` folder — you don't need to touch it.)
 
 ---
 
