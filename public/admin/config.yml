@@ -1,0 +1,94 @@
+# ─────────────────────────────────────────────────────────────────────────
+# Decap CMS configuration — powers the GUI editor at /admin.
+#
+# This site deploys to Cloudflare Pages, so it uses the GitHub backend
+# (Netlify's "Git Gateway" only works on Netlify). The GitHub backend needs
+# a small OAuth helper so the CMS can log people in. Setup is a one-time
+# job — see the "Using the /admin editor" section of README.md.
+#
+# After you create the OAuth helper, uncomment `base_url` below and point it
+# at it. Until then, /admin will load but login won't complete.
+# ─────────────────────────────────────────────────────────────────────────
+backend:
+  name: github
+  repo: jwalker618/carpenters-web
+  branch: main
+  # base_url: https://your-oauth-helper.workers.dev
+
+# Saves edits as new commits straight to the branch above.
+# Switch to `editorial_workflow` later if you want a draft/review step.
+publish_mode: simple
+
+# Uploaded photos land in src/assets/projects so Astro can optimise them.
+# public_folder is the path written into each project file (relative to the
+# markdown file, which lives in src/content/projects).
+media_folder: src/assets/projects
+public_folder: ../../assets/projects
+
+collections:
+  - name: projects
+    label: Projects
+    label_singular: Project
+    folder: src/content/projects
+    create: true
+    # The filename becomes the project's web address (its "slug").
+    slug: '{{fields.title | slug}}'
+    summary: '{{title}} — {{category}}'
+    sortable_fields: [date, title]
+    fields:
+      - { name: title, label: Title, widget: string }
+      - {
+          name: date,
+          label: Date completed,
+          widget: datetime,
+          date_format: 'YYYY-MM-DD',
+          time_format: false,
+          picker_utc: true,
+        }
+      - name: category
+        label: Category
+        widget: select
+        options: [tables, chairs, cabinetry, custom, restoration]
+      - {
+          name: materials,
+          label: Materials,
+          widget: list,
+          field: { name: material, label: Material, widget: string },
+        }
+      - {
+          name: description,
+          label: Short description (for cards),
+          widget: text,
+        }
+      - { name: coverImage, label: Cover photo, widget: image }
+      - {
+          name: gallery,
+          label: Gallery photos,
+          widget: list,
+          field: { name: photo, label: Photo, widget: image },
+          required: false,
+        }
+      - {
+          name: featured,
+          label: Show on home page?,
+          widget: boolean,
+          default: false,
+        }
+      - name: testimonial
+        label: Client testimonial (optional)
+        widget: object
+        collapsed: true
+        required: false
+        fields:
+          - { name: quote, label: Quote, widget: text, required: false }
+          - {
+              name: attribution,
+              label: Who said it,
+              widget: string,
+              required: false,
+            }
+      - {
+          name: body,
+          label: Full description (long-form),
+          widget: markdown,
+        }

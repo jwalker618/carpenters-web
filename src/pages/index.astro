@@ -1,0 +1,72 @@
+---
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { site } from '../site';
+import hero from '../assets/hero.jpg';
+
+const projects = await getCollection('projects');
+const featured = projects
+  .filter((p) => p.data.featured)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 6);
+---
+
+<BaseLayout>
+  <!-- Hero -->
+  <section class="relative">
+    <Image
+      src={hero}
+      alt="Featured piece of carpentry work"
+      widths={[768, 1280, 1920]}
+      sizes="100vw"
+      class="h-[70vh] min-h-[420px] w-full object-cover"
+      loading="eager"
+    />
+    <div class="absolute inset-0 flex items-end bg-bark/30">
+      <div class="mx-auto w-full max-w-6xl px-5 pb-12">
+        <h1 class="max-w-2xl font-serif text-4xl text-cream sm:text-6xl">
+          {site.tagline}
+        </h1>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured projects -->
+  <section class="mx-auto max-w-6xl px-5 py-20">
+    <div class="mb-10 flex items-end justify-between">
+      <h2 class="font-serif text-3xl sm:text-4xl">Selected Work</h2>
+      <a
+        href="/portfolio"
+        class="text-sm tracking-widest text-forest uppercase hover:underline"
+        >View all &rarr;</a
+      >
+    </div>
+
+    <div class="grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+      {featured.map((project) => <ProjectCard project={project} />)}
+    </div>
+  </section>
+
+  <!-- Contact CTA -->
+  <section class="bg-forest text-cream">
+    <div
+      class="mx-auto flex max-w-6xl flex-col gap-6 px-5 py-20 sm:flex-row sm:items-center sm:justify-between"
+    >
+      <div>
+        <h2 class="font-serif text-3xl sm:text-4xl">
+          Have a piece in mind?
+        </h2>
+        <p class="mt-2 text-cream/80">
+          Commissions, restorations, and built-ins — let's talk it through.
+        </p>
+      </div>
+      <a
+        href="/contact"
+        class="inline-block self-start border border-cream px-8 py-3 text-sm tracking-widest uppercase transition-colors hover:bg-cream hover:text-forest"
+        >Get in touch</a
+      >
+    </div>
+  </section>
+</BaseLayout>

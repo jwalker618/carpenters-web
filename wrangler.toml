@@ -1,0 +1,7 @@
+# Cloudflare Pages configuration.
+# The site is fully static, so this only needs to point Cloudflare at the
+# build output folder. Build command and Node version are set in the
+# Cloudflare Pages dashboard (see README.md → Deployment).
+name = "carpenters-web"
+pages_build_output_dir = "dist"
+compatibility_date = "2025-05-01"

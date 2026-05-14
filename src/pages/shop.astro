@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+/* ───────────────────────────────────────────────────────────────────────
+   FUTURE STOREFRONT — currently a "coming soon" stub.
+
+   When you're ready to sell ready-made pieces online, this page becomes
+   the shop. The plan is to use Snipcart (https://snipcart.com), which
+   bolts onto a static site without a backend. To wire it up:
+
+   1. Create a Snipcart account and copy your public API key.
+   2. Add the Snipcart script + stylesheet to src/layouts/BaseLayout.astro
+      (in the <head>), or just to this page if the cart is shop-only:
+         <link rel="stylesheet" href="https://cdn.snipcart.com/themes/v3.7.1/default/snipcart.css" />
+         <div hidden id="snipcart" data-api-key="YOUR_SNIPCART_KEY"></div>
+         <script async src="https://cdn.snipcart.com/themes/v3.7.1/default/snipcart.js"></script>
+   3. Create a `products` content collection (mirroring `projects` in
+      src/content/config.ts) with price + inventory fields.
+   4. Render product cards below, each with a Snipcart buy button:
+         <button class="snipcart-add-item"
+                 data-item-id="..." data-item-name="..."
+                 data-item-price="..." data-item-url="/shop">Add to cart</button>
+
+   No re-architecting needed — the site stays static and Snipcart handles
+   cart, checkout and payments.
+   ─────────────────────────────────────────────────────────────────────── */
+---
+
+<BaseLayout title="Shop">
+  <section
+    class="mx-auto flex max-w-3xl flex-col items-center px-5 py-32 text-center"
+  >
+    <p class="text-xs tracking-widest text-forest uppercase">Coming soon</p>
+    <h1 class="mt-3 font-serif text-4xl sm:text-5xl">The Shop</h1>
+    <p class="mt-4 max-w-lg text-lg text-bark-soft">
+      A small collection of ready-made pieces — cutting boards, stools and
+      shelves — will be available to buy here before long. In the meantime,
+      everything is made to order.
+    </p>
+    <a
+      href="/contact"
+      class="mt-8 border border-forest px-8 py-3 text-sm tracking-widest text-forest uppercase transition-colors hover:bg-forest hover:text-cream"
+    >
+      Commission a piece
+    </a>
+  </section>
+</BaseLayout>

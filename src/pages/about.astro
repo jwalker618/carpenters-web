@@ -1,0 +1,77 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../site';
+import portrait from '../assets/about-portrait.jpg';
+---
+
+<BaseLayout title="About">
+  <section class="mx-auto max-w-5xl px-5 py-16">
+    <div class="grid gap-12 md:grid-cols-2 md:items-start">
+      <div class="overflow-hidden bg-cream-deep">
+        <Image
+          src={portrait}
+          alt={`${site.carpenterName} in the workshop`}
+          widths={[400, 800]}
+          sizes="(max-width: 768px) 100vw, 50vw"
+          class="w-full object-cover"
+        />
+      </div>
+
+      <div>
+        <h1 class="font-serif text-4xl sm:text-5xl">About {site.carpenterName}</h1>
+        <div class="mt-6 space-y-4 text-lg leading-relaxed text-bark-soft">
+          <p>
+            I've been working wood for over twenty years — first as a finish
+            carpenter on job sites, then, since 2012, in my own shop building
+            furniture and cabinetry for people who want something made to last.
+          </p>
+          <p>
+            Every commission starts with a conversation: how the piece will be
+            used, where it will live, and what it should feel like in ten or
+            fifty years. I work mostly in domestic hardwoods, joined the
+            traditional way, and finished by hand.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Methods / philosophy -->
+    <div class="mt-16 grid gap-10 sm:grid-cols-3">
+      <div>
+        <h2 class="font-serif text-2xl">Honest joinery</h2>
+        <p class="mt-2 text-bark-soft">
+          Mortise and tenon, dovetails, draw-bored joints — built to be
+          repaired, not replaced.
+        </p>
+      </div>
+      <div>
+        <h2 class="font-serif text-2xl">Local materials</h2>
+        <p class="mt-2 text-bark-soft">
+          Hardwoods sourced regionally and air-dried slowly, so the wood is
+          stable and the grain has character.
+        </p>
+      </div>
+      <div>
+        <h2 class="font-serif text-2xl">Hand finishes</h2>
+        <p class="mt-2 text-bark-soft">
+          Oils, waxes and shellac applied by hand — finishes you can maintain
+          yourself over the life of the piece.
+        </p>
+      </div>
+    </div>
+
+    <!-- Workshop location -->
+    <div class="mt-16 border-t border-cream-deep pt-8">
+      <h2 class="text-xs tracking-widest text-bark-soft uppercase">
+        The Workshop
+      </h2>
+      <p class="mt-2 max-w-xl text-lg text-bark-soft">
+        The shop is in {site.workshopLocation}. Visits are by appointment —
+        <a href="/contact" class="text-forest hover:underline"
+          >get in touch</a
+        > to arrange a time to talk through a project in person.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
