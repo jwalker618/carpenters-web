@@ -3,39 +3,103 @@ import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProjectCard from '../components/ProjectCard.astro';
+import BeholdFeed from '../components/BeholdFeed.astro';
 import { site } from '../site';
 import hero from '../assets/hero.jpg';
+import contrastImage from '../assets/projects/walnut-dining-table-1.jpg';
 
 const projects = await getCollection('projects');
+
 const featured = projects
   .filter((p) => p.data.featured)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, 6);
+
+const testimonials = projects
+  .filter((p) => p.data.testimonial?.quote)
+  .slice(0, 3)
+  .map((p) => p.data.testimonial!);
+
+const services = [
+  {
+    title: 'Tables & seating',
+    body: 'Dining tables, side tables, chairs and benches built to your room and the way you live.',
+  },
+  {
+    title: 'Cabinetry & built-ins',
+    body: 'Kitchens, libraries, wardrobes and alcove shelving — designed to look like furniture, not joinery.',
+  },
+  {
+    title: 'Restoration',
+    body: 'Re-finishing, re-caning and joint repair on heirloom pieces. Cared-for, not made new.',
+  },
+  {
+    title: 'Bespoke commissions',
+    body: 'One-off pieces in wood: from a single shelf to a whole-room fit-out, drawn with you.',
+  },
+];
 ---
 
-<BaseLayout>
-  <!-- Hero -->
-  <section class="relative">
-    <Image
-      src={hero}
-      alt="Featured piece of carpentry work"
-      widths={[768, 1280, 1920]}
-      sizes="100vw"
-      class="h-[70vh] min-h-[420px] w-full object-cover"
-      loading="eager"
-    />
-    <div class="absolute inset-0 flex items-end bg-bark/30">
-      <div class="mx-auto w-full max-w-6xl px-5 pb-12">
-        <h1 class="max-w-2xl font-serif text-4xl text-cream sm:text-6xl">
+<BaseLayout transparentNav>
+  <!-- ─── Hero with scroll parallax ─────────────────────────────── -->
+  <section class="relative h-screen min-h-[560px] w-full overflow-hidden">
+    <div class="absolute inset-0">
+      <Image
+        src={hero}
+        alt="Featured carpentry work"
+        widths={[768, 1280, 1920]}
+        sizes="100vw"
+        loading="eager"
+        data-parallax="0.35"
+        class="h-full w-full object-cover"
+      />
+    </div>
+    <div
+      class="absolute inset-0 bg-gradient-to-t from-bark/80 via-bark/20 to-bark/40"
+    >
+    </div>
+    <div class="relative z-10 flex h-full items-end">
+      <div class="mx-auto w-full max-w-6xl px-5 pb-20 sm:pb-28">
+        <p class="text-xs tracking-widest text-cream/80 uppercase">
+          {site.workshopLocation}
+        </p>
+        <h1
+          class="mt-4 max-w-3xl font-serif text-4xl text-cream sm:text-6xl md:text-7xl"
+        >
           {site.tagline}
         </h1>
       </div>
     </div>
   </section>
 
-  <!-- Featured projects -->
+  <!-- ─── Services (numbered) ───────────────────────────────────── -->
+  <section class="mx-auto max-w-6xl px-5 py-24">
+    <div class="fade-in mb-14 max-w-2xl">
+      <p class="text-xs tracking-widest text-forest uppercase">
+        What I make
+      </p>
+      <h2 class="mt-3 font-serif text-3xl sm:text-4xl md:text-5xl">
+        A small studio. A long list of things I'd happily make for you.
+      </h2>
+    </div>
+    <ol class="grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        services.map((s, i) => (
+          <li class="fade-in">
+            <span class="font-serif text-5xl text-forest/30">
+              {String(i + 1).padStart(2, '0')}
+            </span>
+            <h3 class="mt-3 font-serif text-2xl">{s.title}</h3>
+            <p class="mt-2 text-bark-soft">{s.body}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <!-- ─── Selected work ─────────────────────────────────────────── -->
   <section class="mx-auto max-w-6xl px-5 py-20">
-    <div class="mb-10 flex items-end justify-between">
+    <div class="fade-in mb-10 flex items-end justify-between">
       <h2 class="font-serif text-3xl sm:text-4xl">Selected Work</h2>
       <a
         href="/portfolio"
@@ -43,28 +107,113 @@ const featured = projects
         >View all &rarr;</a
       >
     </div>
-
     <div class="grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
       {featured.map((project) => <ProjectCard project={project} />)}
     </div>
   </section>
 
-  <!-- Contact CTA -->
-  <section class="bg-forest text-cream">
-    <div
-      class="mx-auto flex max-w-6xl flex-col gap-6 px-5 py-20 sm:flex-row sm:items-center sm:justify-between"
-    >
-      <div>
-        <h2 class="font-serif text-3xl sm:text-4xl">
-          Have a piece in mind?
-        </h2>
-        <p class="mt-2 text-cream/80">
-          Commissions, restorations, and built-ins — let's talk it through.
-        </p>
+  <!-- ─── B&W image over warm contrast block ────────────────────── -->
+  <section class="bg-cream">
+    <div class="mx-auto grid max-w-7xl items-stretch md:grid-cols-2">
+      <div
+        class="relative order-2 aspect-[4/5] overflow-hidden md:order-1 md:aspect-auto"
+      >
+        <Image
+          src={contrastImage}
+          alt="Detail of a finished piece"
+          widths={[600, 1000, 1400]}
+          sizes="(max-width: 768px) 100vw, 50vw"
+          class="absolute inset-0 h-full w-full object-cover grayscale contrast-125 brightness-90"
+        />
       </div>
+      <div
+        class="order-1 flex items-center bg-forest p-10 text-cream md:order-2 md:p-16 lg:p-20"
+      >
+        <div class="fade-in max-w-md">
+          <p class="text-xs tracking-widest text-cream/70 uppercase">
+            The work
+          </p>
+          <h2 class="mt-4 font-serif text-3xl sm:text-4xl md:text-5xl">
+            Quiet joinery. Patient finishes. Pieces that earn a second life.
+          </h2>
+          <p class="mt-6 text-cream/80">
+            Every commission begins with a conversation about how a piece
+            will be used, and ends with a finish that can be cared for at
+            home — built to be repaired, not replaced.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Testimonials ──────────────────────────────────────────── -->
+  {
+    testimonials.length > 0 && (
+      <section class="bg-cream-deep/40">
+        <div class="mx-auto max-w-6xl px-5 py-24">
+          <div class="fade-in mb-12 max-w-2xl">
+            <p class="text-xs tracking-widest text-forest uppercase">
+              Kind words
+            </p>
+            <h2 class="mt-3 font-serif text-3xl sm:text-4xl md:text-5xl">
+              From the people who live with the work.
+            </h2>
+          </div>
+          <div class="grid gap-10 md:grid-cols-2 md:gap-14">
+            {testimonials.map((t) => (
+              <blockquote class="fade-in border-l-2 border-forest pl-6">
+                <p class="font-serif text-2xl leading-snug text-bark md:text-3xl">
+                  &ldquo;{t.quote}&rdquo;
+                </p>
+                <footer class="mt-4 text-sm tracking-widest text-bark-soft uppercase">
+                  — {t.attribution}
+                </footer>
+              </blockquote>
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- ─── From the workshop (Instagram via Behold.so) ───────────── -->
+  <section class="mx-auto max-w-6xl px-5 py-24">
+    <div class="fade-in mb-10 flex flex-wrap items-end justify-between gap-3">
+      <div>
+        <p class="text-xs tracking-widest text-forest uppercase">
+          From the workshop
+        </p>
+        <h2 class="mt-3 font-serif text-3xl sm:text-4xl">
+          Latest on Instagram
+        </h2>
+      </div>
+      {
+        site.instagramHandle && (
+          <a
+            href={`https://instagram.com/${site.instagramHandle}`}
+            class="text-sm tracking-widest text-forest uppercase hover:underline"
+          >
+            @{site.instagramHandle} &rarr;
+          </a>
+        )
+      }
+    </div>
+    <div class="fade-in">
+      <BeholdFeed feedId={site.beholdFeedId} />
+    </div>
+  </section>
+
+  <!-- ─── Closing CTA (the big-email footer takes the heavier load) -->
+  <section class="border-t border-cream-deep">
+    <div
+      class="mx-auto flex max-w-6xl flex-col gap-6 px-5 py-16 sm:flex-row sm:items-center sm:justify-between"
+    >
+      <h2 class="fade-in font-serif text-3xl sm:text-4xl">
+        Have a piece in mind?
+      </h2>
       <a
         href="/contact"
-        class="inline-block self-start border border-cream px-8 py-3 text-sm tracking-widest uppercase transition-colors hover:bg-cream hover:text-forest"
+        class="fade-in inline-block self-start border border-forest bg-forest px-8 py-3 text-sm tracking-widest text-cream uppercase transition-colors hover:bg-forest-deep"
         >Get in touch</a
       >
     </div>

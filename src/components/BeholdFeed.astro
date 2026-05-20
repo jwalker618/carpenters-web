@@ -1,0 +1,41 @@
+---
+interface Props {
+  feedId: string;
+}
+const { feedId } = Astro.props;
+const configured = feedId && feedId !== 'YOUR_BEHOLD_FEED_ID';
+---
+
+{
+  configured ? (
+    <>
+      {/*
+        Behold renders the latest Instagram posts here. The widget is a
+        custom element loaded by their hosted script. The free plan covers
+        a single connected feed with no setup beyond signing in once at
+        behold.so. Cached photos are served from Behold's CDN, so the
+        Instagram account itself doesn't have to be public for visitors
+        to see the feed.
+      */}
+      <behold-widget feed-id={feedId} />
+      <script
+        is:inline
+        type="module"
+        src="https://w.behold.so/widget.js"
+      />
+    </>
+  ) : (
+    <div class="border border-dashed border-cream-deep px-6 py-12 text-center text-sm text-bark-soft">
+      <p class="font-serif text-xl text-bark">Instagram feed lives here.</p>
+      <p class="mx-auto mt-3 max-w-md">
+        Sign in once at{' '}
+        <a href="https://behold.so" class="text-forest underline">
+          behold.so
+        </a>
+        , connect the Instagram account, then paste the Feed ID into{' '}
+        <code class="font-mono text-xs">beholdFeedId</code> in{' '}
+        <code class="font-mono text-xs">src/site.ts</code>.
+      </p>
+    </div>
+  )
+}
