@@ -1,12 +1,27 @@
 ---
 import { site, nav } from '../site';
 
+interface Props {
+  /** If true, the header starts transparent (over a dark hero) and
+      solidifies once the page is scrolled. Default is solid. */
+  transparent?: boolean;
+}
+
+const { transparent = false } = Astro.props;
+
 const path = Astro.url.pathname;
 const isActive = (href: string) =>
   href === '/' ? path === '/' : path.startsWith(href);
 ---
 
-<header class="border-b border-cream-deep">
+<header
+  id="site-header"
+  data-transparent={String(transparent)}
+  class:list={[
+    'site-nav fixed inset-x-0 top-0 z-40',
+    transparent ? 'is-transparent' : 'is-solid',
+  ]}
+>
   <div class="mx-auto flex max-w-6xl items-center justify-between px-5 py-5">
     <a href="/" class="font-serif text-2xl tracking-tight">{site.name}</a>
 
@@ -17,8 +32,10 @@ const isActive = (href: string) =>
           <a
             href={item.href}
             class:list={[
-              'transition-colors hover:text-forest',
-              isActive(item.href) ? 'text-forest' : 'text-bark-soft',
+              'transition-opacity hover:opacity-100',
+              isActive(item.href)
+                ? 'opacity-100 underline underline-offset-8'
+                : 'opacity-75',
             ]}
           >
             {item.label}
@@ -42,8 +59,11 @@ const isActive = (href: string) =>
     </button>
   </div>
 
-  <!-- Mobile nav -->
-  <nav id="mobile-nav" class="hidden border-t border-cream-deep md:hidden">
+  <!-- Mobile nav: always solid so links stay readable over any background -->
+  <nav
+    id="mobile-nav"
+    class="hidden border-t border-cream-deep bg-cream text-bark md:hidden"
+  >
     <div class="mx-auto flex max-w-6xl flex-col px-5 py-2">
       {
         nav.map((item) => (
@@ -63,10 +83,21 @@ const isActive = (href: string) =>
 </header>
 
 <script>
+  const header = document.getElementById('site-header')!;
   const toggle = document.getElementById('menu-toggle');
   const mobileNav = document.getElementById('mobile-nav');
+
   toggle?.addEventListener('click', () => {
     const open = mobileNav?.classList.toggle('hidden') === false;
     toggle.setAttribute('aria-expanded', String(open));
   });
+
+  // Solidify the nav once the page is scrolled past the hero threshold.
+  if (header.dataset.transparent === 'true') {
+    const update = () => {
+      header.classList.toggle('is-scrolled', window.scrollY > 40);
+    };
+    update();
+    document.addEventListener('scroll', update, { passive: true });
+  }
 </script>

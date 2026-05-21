@@ -24,6 +24,15 @@ export const site = {
     facebook: '',
     pinterest: '',
   },
+
+  /* Instagram feed (Behold.so). Free to set up:
+       1. Sign in at https://behold.so with the Instagram account.
+       2. Behold gives you a Feed ID — paste it below.
+     Until then, the "From the workshop" strip on the home page shows
+     setup instructions instead of photos. The Instagram handle is also
+     used to render an "@handle →" link next to the strip. */
+  beholdFeedId: 'YOUR_BEHOLD_FEED_ID',
+  instagramHandle: '',
 };
 
 export const nav = [

@@ -3,12 +3,35 @@ import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { site } from '../site';
 import portrait from '../assets/about-portrait.jpg';
+
+const process = [
+  {
+    title: 'Conversation',
+    body: 'We talk through how the piece will be used, where it will live, and what it should feel like over time. No charge for this; it usually saves money later.',
+  },
+  {
+    title: 'Sketches & estimate',
+    body: 'A few drawings, a clear timeline, and a fixed price. Nothing starts in the workshop until both of us are happy.',
+  },
+  {
+    title: 'Material selection',
+    body: 'We choose the boards together where it matters — grain, figure, knots. Most of the wood is locally sourced and air-dried.',
+  },
+  {
+    title: 'Build',
+    body: 'Cut, joined and assembled in the workshop. I send photos at the key stages so you can see the piece come together.',
+  },
+  {
+    title: 'Finish & delivery',
+    body: 'Hand-rubbed oil, wax or shellac applied in many thin coats, then careful delivery and installation.',
+  },
+];
 ---
 
 <BaseLayout title="About">
   <section class="mx-auto max-w-5xl px-5 py-16">
     <div class="grid gap-12 md:grid-cols-2 md:items-start">
-      <div class="overflow-hidden bg-cream-deep">
+      <div class="fade-in overflow-hidden bg-cream-deep">
         <Image
           src={portrait}
           alt={`${site.carpenterName} in the workshop`}
@@ -18,18 +41,21 @@ import portrait from '../assets/about-portrait.jpg';
         />
       </div>
 
-      <div>
-        <h1 class="font-serif text-4xl sm:text-5xl">About {site.carpenterName}</h1>
+      <div class="fade-in">
+        <h1 class="font-serif text-4xl sm:text-5xl">
+          About {site.carpenterName}
+        </h1>
         <div class="mt-6 space-y-4 text-lg leading-relaxed text-bark-soft">
           <p>
             I've been working wood for over twenty years — first as a finish
             carpenter on job sites, then, since 2012, in my own shop building
-            furniture and cabinetry for people who want something made to last.
+            furniture and cabinetry for people who want something made to
+            last.
           </p>
           <p>
-            Every commission starts with a conversation: how the piece will be
-            used, where it will live, and what it should feel like in ten or
-            fifty years. I work mostly in domestic hardwoods, joined the
+            Every commission starts with a conversation: how the piece will
+            be used, where it will live, and what it should feel like in ten
+            or fifty years. I work mostly in domestic hardwoods, joined the
             traditional way, and finished by hand.
           </p>
         </div>
@@ -37,32 +63,61 @@ import portrait from '../assets/about-portrait.jpg';
     </div>
 
     <!-- Methods / philosophy -->
-    <div class="mt-16 grid gap-10 sm:grid-cols-3">
-      <div>
+    <div class="mt-20 grid gap-10 sm:grid-cols-3">
+      <div class="fade-in">
         <h2 class="font-serif text-2xl">Honest joinery</h2>
         <p class="mt-2 text-bark-soft">
           Mortise and tenon, dovetails, draw-bored joints — built to be
           repaired, not replaced.
         </p>
       </div>
-      <div>
+      <div class="fade-in">
         <h2 class="font-serif text-2xl">Local materials</h2>
         <p class="mt-2 text-bark-soft">
           Hardwoods sourced regionally and air-dried slowly, so the wood is
           stable and the grain has character.
         </p>
       </div>
-      <div>
+      <div class="fade-in">
         <h2 class="font-serif text-2xl">Hand finishes</h2>
         <p class="mt-2 text-bark-soft">
-          Oils, waxes and shellac applied by hand — finishes you can maintain
-          yourself over the life of the piece.
+          Oils, waxes and shellac applied by hand — finishes you can
+          maintain yourself over the life of the piece.
         </p>
       </div>
     </div>
 
+    <!-- Process (numbered) -->
+    <div class="mt-24">
+      <div class="fade-in max-w-2xl">
+        <p class="text-xs tracking-widest text-forest uppercase">
+          How a piece comes together
+        </p>
+        <h2 class="mt-3 font-serif text-3xl sm:text-4xl md:text-5xl">
+          The process
+        </h2>
+      </div>
+      <ol class="mt-12 space-y-12 md:space-y-14">
+        {
+          process.map((step, i) => (
+            <li class="fade-in grid items-baseline gap-2 md:grid-cols-[160px_1fr] md:gap-10">
+              <span class="font-serif text-5xl text-forest/30 md:text-6xl">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <div>
+                <h3 class="font-serif text-2xl md:text-3xl">{step.title}</h3>
+                <p class="mt-2 max-w-2xl text-lg text-bark-soft">
+                  {step.body}
+                </p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+
     <!-- Workshop location -->
-    <div class="mt-16 border-t border-cream-deep pt-8">
+    <div class="mt-24 border-t border-cream-deep pt-8">
       <h2 class="text-xs tracking-widest text-bark-soft uppercase">
         The Workshop
       </h2>

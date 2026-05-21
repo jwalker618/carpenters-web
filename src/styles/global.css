@@ -41,3 +41,50 @@
     color: inherit;
   }
 }
+
+/* ---- Sticky-nav states -------------------------------------------------
+   The header is `position: fixed`. On most pages it's solid (cream). On
+   pages with a dark hero (home), it starts transparent over the hero and
+   is given `.is-scrolled` by a small script once the user scrolls. */
+.site-nav {
+  background: transparent;
+  color: var(--color-cream);
+  transition:
+    background-color 0.35s ease,
+    color 0.35s ease,
+    border-color 0.35s ease;
+}
+.site-nav.is-solid,
+.site-nav.is-transparent.is-scrolled {
+  background: rgb(246 241 233 / 0.92);
+  color: var(--color-bark);
+  border-bottom: 1px solid var(--color-cream-deep);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* ---- Fade-in on scroll -------------------------------------------------
+   Add `class="fade-in"` to any element to have it ease in once it
+   enters the viewport. A global IntersectionObserver in BaseLayout
+   adds `.is-visible` when each element scrolls into view. */
+.fade-in {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.9s cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.fade-in.is-visible {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .fade-in {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  [data-parallax] {
+    transform: none !important;
+  }
+}
