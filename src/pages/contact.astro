@@ -1,13 +1,25 @@
 ---
+import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { site } from '../site';
+import logo from '../assets/logo.png';
 
 const socials = Object.entries(site.social).filter(([, url]) => url);
 ---
 
 <BaseLayout title="Contact">
   <section class="mx-auto max-w-5xl px-5 py-16">
-    <h1 class="font-serif text-4xl sm:text-5xl">Get in touch</h1>
+    <!-- Letterhead: Anne's actual mark at the top of the page,
+         so getting in touch feels like writing onto his stationery. -->
+    <Image
+      src={logo}
+      alt={site.name}
+      widths={[320, 640]}
+      sizes="(max-width: 640px) 240px, 320px"
+      class="mb-14 h-auto w-64 sm:w-80"
+    />
+
+    <h1 class="font-serif text-4xl italic sm:text-5xl">Get in touch.</h1>
     <p class="mt-2 max-w-xl text-bark-soft">
       Tell me about the piece you have in mind, or just say hello. I read
       every message myself.
@@ -112,7 +124,11 @@ const socials = Object.entries(site.social).filter(([, url]) => url);
           <h2 class="text-xs tracking-widest text-bark-soft uppercase">
             Workshop
           </h2>
-          <p class="mt-1 font-serif text-xl">{site.workshopLocation}</p>
+          <address class="mt-1 font-serif text-xl not-italic leading-snug">
+            {
+              site.addressLines.map((line) => <span class="block">{line}</span>)
+            }
+          </address>
         </div>
         {
           socials.length > 0 && (

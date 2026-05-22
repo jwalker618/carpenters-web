@@ -9,12 +9,13 @@ const projectsOut = new URL('../src/assets/projects/', import.meta.url);
 await mkdir(projectsOut, { recursive: true });
 
 // Warm wood-ish palettes: [top, bottom, label colour]
+// Desaturated to sit quietly next to Anne's navy + cyan brand palette.
 const tones = {
-  hero: ['#6b4a2f', '#3a2a1c', '#f6f1e9'],
-  portrait: ['#7a5c3e', '#4a3826', '#f6f1e9'],
-  walnut: ['#4a3526', '#2a1d14', '#e9dcc8'],
-  oak: ['#a07d4f', '#6b4f30', '#2c241c'],
-  chair: ['#8a6440', '#5a3f28', '#f6f1e9'],
+  hero: ['#3f3a33', '#1d1a17', '#e7e6e2'],
+  portrait: ['#48413a', '#22201c', '#e7e6e2'],
+  walnut: ['#2e2823', '#14110e', '#cfc8bb'],
+  oak: ['#6a5a45', '#39301f', '#e7e6e2'],
+  chair: ['#4a4138', '#241f1a', '#e7e6e2'],
 };
 
 function svg(label, [top, bottom, ink]) {

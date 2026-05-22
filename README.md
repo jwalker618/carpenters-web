@@ -1,6 +1,6 @@
-# Hartwood Carpentry — website
+# AVM Timber Design — website
 
-This is the code behind the Hartwood Carpentry website. You don't need to be
+This is the code behind the AVM Timber Design website. You don't need to be
 a programmer to keep it up to date. This guide covers the everyday jobs:
 adding projects, editing the About page, changing your contact details, and
 how the site goes live.
