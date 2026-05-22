@@ -15,7 +15,7 @@ gallery:
 featured: true
 testimonial:
   quote: The table is the heart of our home now. Every dinner guest runs their hand along the edge.
-  attribution: Sarah & Tom M., Portland
+  attribution: Sarah & Tom M., Stoke Newington
 ---
 
 This dining table started as a single slab of black walnut, air-dried for
