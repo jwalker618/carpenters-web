@@ -1,55 +1,145 @@
-/* Generates warm-toned placeholder photos so the site renders without
-   real photography. Run with `node scripts/generate-placeholders.mjs`.
-   Replace the files in src/assets/ with real photos when ready. */
+/* Procedural wood-grain placeholder generator.
+   Produces JPGs that look like photographed timber rather than flat
+   gradient cards. Each image gets layered sine-based grain, a touch of
+   pixel grain, and a soft vignette. Re-run with `node
+   scripts/generate-placeholders.mjs`; replace any file in src/assets/
+   with a real photo whenever one is ready. */
 import sharp from 'sharp';
 import { mkdir } from 'node:fs/promises';
 
-const out = new URL('../src/assets/', import.meta.url);
+const W = 1600;
+const H = 1100;
+
 const projectsOut = new URL('../src/assets/projects/', import.meta.url);
 await mkdir(projectsOut, { recursive: true });
 
-// Warm wood-ish palettes: [top, bottom, label colour]
-// Desaturated to sit quietly next to Anne's navy + cyan brand palette.
+// Seeded PRNG so the same filename always produces the same image.
+function rng(seed) {
+  let s = seed | 0 || 1;
+  return () => {
+    s ^= s << 13;
+    s ^= s >>> 17;
+    s ^= s << 5;
+    return ((s >>> 0) % 100000) / 100000;
+  };
+}
+
+function hashString(str) {
+  let h = 2166136261;
+  for (let i = 0; i < str.length; i++) {
+    h ^= str.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h;
+}
+
 const tones = {
-  hero: ['#3f3a33', '#1d1a17', '#e7e6e2'],
-  portrait: ['#48413a', '#22201c', '#e7e6e2'],
-  walnut: ['#2e2823', '#14110e', '#cfc8bb'],
-  oak: ['#6a5a45', '#39301f', '#e7e6e2'],
-  chair: ['#4a4138', '#241f1a', '#e7e6e2'],
+  // [highlight rgb, shadow rgb] — sampled to feel like the named wood
+  walnut: [
+    [108, 78, 56],
+    [54, 34, 22],
+  ],
+  oak: [
+    [188, 152, 110],
+    [120, 86, 52],
+  ],
+  ash: [
+    [156, 124, 92],
+    [88, 64, 42],
+  ],
+  workshop: [
+    [120, 96, 72],
+    [42, 32, 22],
+  ],
+  portrait: [
+    [142, 108, 80],
+    [70, 50, 36],
+  ],
 };
 
-function svg(label, [top, bottom, ink]) {
-  return Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1100">
+function grainBuffer({ width, height, tone, seed }) {
+  const rand = rng(seed);
+  const [hi, lo] = tone;
+  const buf = Buffer.alloc(width * height * 3);
+
+  // Pre-bake the per-column wood-grain noise so it's identical for
+  // every row — that's what gives the "vertical grain" feel.
+  const colour = new Float32Array(width);
+  const phases = [
+    rand() * Math.PI * 2,
+    rand() * Math.PI * 2,
+    rand() * Math.PI * 2,
+    rand() * Math.PI * 2,
+  ];
+  for (let x = 0; x < width; x++) {
+    const n =
+      Math.sin(x * 0.018 + phases[0]) * 0.42 +
+      Math.sin(x * 0.062 + phases[1]) * 0.26 +
+      Math.sin(x * 0.17 + phases[2]) * 0.16 +
+      Math.sin(x * 0.41 + phases[3]) * 0.1 +
+      Math.sin(x * 0.83) * Math.sin(x * 1.13) * 0.06;
+    colour[x] = n * 0.5 + 0.5; // 0..1
+  }
+
+  for (let y = 0; y < height; y++) {
+    // Subtle horizontal undulation — like looking at a board where
+    // grain bends gently along the length.
+    const sway = Math.sin(y * 0.004) * 6 + Math.sin(y * 0.013) * 3;
+    for (let x = 0; x < width; x++) {
+      const xc = Math.max(0, Math.min(width - 1, Math.round(x + sway)));
+      let n = colour[xc];
+      // Per-pixel grit
+      n += (rand() - 0.5) * 0.06;
+      n = Math.max(0, Math.min(1, n));
+      const i = (y * width + x) * 3;
+      buf[i] = Math.round(lo[0] + (hi[0] - lo[0]) * n);
+      buf[i + 1] = Math.round(lo[1] + (hi[1] - lo[1]) * n);
+      buf[i + 2] = Math.round(lo[2] + (hi[2] - lo[2]) * n);
+    }
+  }
+  return buf;
+}
+
+function vignetteSvg(width, height, strength = 0.45) {
+  return Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
     <defs>
-      <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="${top}"/>
-        <stop offset="1" stop-color="${bottom}"/>
-      </linearGradient>
+      <radialGradient id="v" cx="50%" cy="50%" r="72%">
+        <stop offset="55%" stop-color="black" stop-opacity="0"/>
+        <stop offset="100%" stop-color="black" stop-opacity="${strength}"/>
+      </radialGradient>
     </defs>
-    <rect width="1600" height="1100" fill="url(#g)"/>
-    <rect x="40" y="40" width="1520" height="1020" fill="none" stroke="${ink}" stroke-opacity="0.35" stroke-width="2"/>
-    <text x="800" y="540" font-family="Georgia, serif" font-size="64" fill="${ink}" text-anchor="middle">${label}</text>
-    <text x="800" y="600" font-family="Georgia, serif" font-size="26" fill="${ink}" fill-opacity="0.7" text-anchor="middle">placeholder — replace with a real photo</text>
+    <rect width="${width}" height="${height}" fill="url(#v)"/>
   </svg>`);
 }
 
-async function make(path, label, tone) {
-  await sharp(svg(label, tone)).jpeg({ quality: 82 }).toFile(new URL(path, import.meta.url).pathname);
+async function make(path, tone, { vignette = 0.45, blur = 0.6 } = {}) {
+  const seed = hashString(path);
+  const grain = grainBuffer({ width: W, height: H, tone, seed });
+  const base = sharp(grain, { raw: { width: W, height: H, channels: 3 } });
+  await base
+    .composite([{ input: vignetteSvg(W, H, vignette), blend: 'multiply' }])
+    .blur(blur)
+    .jpeg({ quality: 82, mozjpeg: true })
+    .toFile(new URL(path, import.meta.url).pathname);
   console.log('wrote', path);
 }
 
-await make('../src/assets/hero.jpg', 'Workshop Hero', tones.hero);
-await make('../src/assets/about-portrait.jpg', 'The Carpenter', tones.portrait);
+// Hero + portrait — set inside the project lists below would be ugly;
+// keep them at the top alongside the per-project sets.
+await make('../src/assets/hero.jpg', tones.workshop, { vignette: 0.55 });
+await make('../src/assets/about-portrait.jpg', tones.portrait, {
+  vignette: 0.4,
+});
 
 const sets = [
-  ['walnut-dining-table', 'Walnut Dining Table', tones.walnut],
-  ['oak-bookshelf-cabinet', 'Oak Bookshelf Cabinet', tones.oak],
-  ['vintage-rocking-chair', 'Restored Rocking Chair', tones.chair],
+  ['walnut-dining-table', tones.walnut],
+  ['oak-bookshelf-cabinet', tones.oak],
+  ['vintage-rocking-chair', tones.ash],
 ];
 
-for (const [base, label, tone] of sets) {
-  await make(`../src/assets/projects/${base}-cover.jpg`, label, tone);
+for (const [base, tone] of sets) {
+  await make(`../src/assets/projects/${base}-cover.jpg`, tone);
   for (let i = 1; i <= 3; i++) {
-    await make(`../src/assets/projects/${base}-${i}.jpg`, `${label} ${i}`, tone);
+    await make(`../src/assets/projects/${base}-${i}.jpg`, tone);
   }
 }
