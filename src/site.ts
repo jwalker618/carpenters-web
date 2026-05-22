@@ -1,17 +1,19 @@
-/* Site-wide settings. Editing this one file updates the carpenter's
-   name, contact details and social links everywhere on the site. */
+/* Site-wide settings. Editing this one file updates Anne's name,
+   contact details and social links everywhere on the site. */
 export const site = {
-  /** Business / site name shown in the header and browser tab. */
-  name: 'Hartwood Carpentry',
-  /** The carpenter's name, used on the About page and footer. */
-  carpenterName: 'James Hartwood',
+  /** Business / site name shown in the header brand and browser tab. */
+  name: 'AVM Timber Design',
+  /** Anne's name, used on the About page and footer copyright. */
+  carpenterName: 'Anne van Mansvelt',
   /** One-line tagline shown on the home page hero. */
-  tagline: 'Handmade furniture and cabinetry, built to last generations.',
+  tagline: 'Bespoke timber joinery, drawn and made in London.',
 
   /** Contact details — shown on the Contact page and in the footer. */
-  email: 'hello@hartwoodcarpentry.com',
-  phone: '(555) 123-4567',
-  workshopLocation: 'Bellingham, Washington',
+  email: 'anne@avmtimberdesign.co.uk',
+  phone: '07990 641277',
+  workshopLocation: 'London',
+  /** Full address, rendered as separate lines on the Contact page. */
+  addressLines: ['3 Ardilaun Road', 'London N5 2QR'],
 
   /* Web3Forms access key for the contact form. Get a free key at
      https://web3forms.com (just enter your email — no account needed),

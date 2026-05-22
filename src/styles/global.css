@@ -1,19 +1,26 @@
 @import 'tailwindcss';
 
 /* ---- Design tokens ----------------------------------------------------
-   Warm, minimal, photography-first. Off-white background, warm dark
-   brown text, deep forest green accent. Cormorant for headings, Inter
-   for body. Adjust the values below to retune the whole site at once. */
+   Anne's brand: deep navy + a fine cyan accent (the emblem colours),
+   on a quiet near-white background. Typography is a single thin
+   geometric sans (Jost) — the closest free match to the tracked
+   uppercase wordmark on the invoice. Italic light Jost stands in for
+   his "Quotation" italic styling. Adjust the values below to retune
+   the whole site at once. */
 @theme {
-  --color-cream: #f6f1e9;
-  --color-cream-deep: #ece4d6;
-  --color-bark: #2c241c;
-  --color-bark-soft: #5c5043;
-  --color-forest: #2f4733;
-  --color-forest-deep: #1f3024;
+  --color-cream: #f7f6f3;
+  --color-cream-deep: #e7e6e2;
+  --color-bark: #0f2138;
+  --color-bark-soft: #5a6478;
+  --color-forest: #0f2138;
+  --color-forest-deep: #08172a;
+  --color-accent: #80c8d8;
 
-  --font-serif: 'Cormorant', Georgia, 'Times New Roman', serif;
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  /* Both display + body resolve to Jost. The Tailwind `font-serif`
+     utility (still used in templates) maps here too, so existing
+     headlines pick up Jost without per-file edits. */
+  --font-serif: 'Jost', 'Inter', system-ui, sans-serif;
+  --font-sans: 'Jost', 'Inter', system-ui, sans-serif;
 }
 
 @layer base {
@@ -25,16 +32,20 @@
     background-color: var(--color-cream);
     color: var(--color-bark);
     font-family: var(--font-sans);
+    font-weight: 400;
     -webkit-font-smoothing: antialiased;
   }
 
+  /* Light, slightly tracked headlines — echo the thin geometric
+     wordmark on Anne's invoice. */
   h1,
   h2,
   h3,
   h4 {
     font-family: var(--font-serif);
-    font-weight: 500;
-    line-height: 1.1;
+    font-weight: 300;
+    line-height: 1.15;
+    letter-spacing: -0.005em;
   }
 
   a {
@@ -43,9 +54,9 @@
 }
 
 /* ---- Sticky-nav states -------------------------------------------------
-   The header is `position: fixed`. On most pages it's solid (cream). On
-   pages with a dark hero (home), it starts transparent over the hero and
-   is given `.is-scrolled` by a small script once the user scrolls. */
+   The header is `position: fixed`. On most pages it's solid. On pages
+   with a dark hero (home), it starts transparent and is given
+   `.is-scrolled` by a small script once the user scrolls. */
 .site-nav {
   background: transparent;
   color: var(--color-cream);
@@ -56,7 +67,7 @@
 }
 .site-nav.is-solid,
 .site-nav.is-transparent.is-scrolled {
-  background: rgb(246 241 233 / 0.92);
+  background: rgb(247 246 243 / 0.92);
   color: var(--color-bark);
   border-bottom: 1px solid var(--color-cream-deep);
   backdrop-filter: blur(8px);
