@@ -16,7 +16,7 @@ const { project } = Astro.props;
 const { data } = project;
 const { Content } = await render(project);
 
-const formattedDate = data.date.toLocaleDateString('en-US', {
+const formattedDate = data.date.toLocaleDateString('en-GB', {
   month: 'long',
   year: 'numeric',
 });
