@@ -50,6 +50,15 @@
 
   a {
     color: inherit;
+    transition: color 0.2s ease;
+  }
+  /* Body links fade to the cyan accent on hover. Buttons and nav use
+     their own hover behaviour (bg / opacity) and override below. */
+  a:hover {
+    color: var(--color-accent);
+  }
+  .site-nav a:hover {
+    color: inherit;
   }
 }
 
