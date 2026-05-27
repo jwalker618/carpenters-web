@@ -2,7 +2,7 @@
    contact details and social links everywhere on the site. */
 export const site = {
   /** Business / site name shown in the header brand and browser tab. */
-  name: 'AVM Timber Design',
+  name: 'Anne van Mansvelt',
   /** Anne's name, used on the About page and footer copyright. */
   carpenterName: 'Anne van Mansvelt',
   /** One-line tagline shown on the home page hero. */

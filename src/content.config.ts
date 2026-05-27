@@ -12,7 +12,14 @@ const projects = defineCollection({
     z.object({
       title: z.string(),
       date: z.date(),
-      category: z.enum(['tables', 'chairs', 'cabinetry', 'custom', 'restoration']),
+      category: z.enum([
+        'kitchens',
+        'bathrooms',
+        'wardrobes',
+        'built-ins',
+        'furniture',
+        'restoration',
+      ]),
       materials: z.array(z.string()),
       description: z.string(),
       coverImage: image(),

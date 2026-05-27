@@ -1,0 +1,35 @@
+---
+/* Short silent looping clip — the "Live Photo" style. Used to feature
+   moments from finished pieces (soft-close drawers, light moving, etc.).
+
+   Always muted + playsinline so autoplay is allowed on every browser
+   and the clip never tries to go fullscreen on iOS. `preload="metadata"`
+   keeps the page light: the browser fetches enough to render the first
+   frame and start playback, not the whole file up front. */
+interface Props {
+  src: string;
+  /** CSS aspect-ratio string. Defaults to 4/3 to match Anne's clips. */
+  aspectRatio?: string;
+  /** Extra Tailwind classes for the <video> element. */
+  class?: string;
+}
+
+const {
+  src,
+  aspectRatio = '4 / 3',
+  class: className = '',
+} = Astro.props;
+---
+
+<video
+  class:list={['block h-full w-full bg-cream-deep object-cover', className]}
+  style={`aspect-ratio: ${aspectRatio};`}
+  autoplay
+  muted
+  loop
+  playsinline
+  preload="metadata"
+  disablepictureinpicture
+>
+  <source src={src} type="video/mp4" />
+</video>
