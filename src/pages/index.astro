@@ -4,6 +4,7 @@ import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import BeholdFeed from '../components/BeholdFeed.astro';
+import VideoLoop from '../components/VideoLoop.astro';
 import { site } from '../site';
 import hero from '../assets/projects/IMG_5313.JPG';
 import contrastImage from '../assets/projects/IMG_8687.JPEG';
@@ -180,6 +181,34 @@ const services = [
       </section>
     )
   }
+
+  <!-- ─── In motion (silent looping clips from finished pieces) ─── -->
+  <section class="mx-auto max-w-6xl px-5 py-24">
+    <div class="fade-in mb-12 max-w-2xl">
+      <p class="text-xs tracking-widest text-forest uppercase">Detail</p>
+      <h2 class="mt-3 font-serif text-3xl italic sm:text-4xl md:text-5xl">
+        In motion.
+      </h2>
+      <p class="mt-4 text-bark-soft">
+        A few seconds at a time — soft-close drawers, brass catching the
+        light, the small movements that don't sit still in a photograph.
+      </p>
+    </div>
+    <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <div class="fade-in overflow-hidden">
+        <VideoLoop src="/videos/IMG_2754.mp4" />
+      </div>
+      <div class="fade-in overflow-hidden">
+        <VideoLoop src="/videos/IMG_5236.mp4" />
+      </div>
+      <div class="fade-in overflow-hidden">
+        <VideoLoop src="/videos/IMG_3665.mp4" />
+      </div>
+      <div class="fade-in overflow-hidden">
+        <VideoLoop src="/videos/IMG_4091.mp4" />
+      </div>
+    </div>
+  </section>
 
   <!-- ─── From the workshop (Instagram via Behold.so) ───────────── -->
   <section class="mx-auto max-w-6xl px-5 py-24">
