@@ -48,7 +48,7 @@ collections:
       - name: category
         label: Category
         widget: select
-        options: [tables, chairs, cabinetry, custom, restoration]
+        options: [kitchens, bathrooms, wardrobes, built-ins, furniture, restoration]
       - {
           name: materials,
           label: Materials,
