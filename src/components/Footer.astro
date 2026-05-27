@@ -1,5 +1,6 @@
 ---
 import { site } from '../site';
+import Logo from './Logo.astro';
 
 const socials = Object.entries(site.social).filter(([, url]) => url);
 const year = new Date().getFullYear();
@@ -7,46 +8,15 @@ const year = new Date().getFullYear();
 
 <footer class="mt-24 bg-forest text-cream">
   <div class="mx-auto max-w-6xl px-5 py-20">
-    <!-- Letterhead-style mark: just the emblem (no circle background,
-         since the footer itself is the navy field) sitting opposite
-         the "Get in touch" label. -->
+    <!-- Letterhead-style mark: Anne's seal in cream, opposite the
+         "Get in touch" label, separated by a hairline divider. -->
     <div
       class="mb-5 flex items-center justify-between border-b border-cream/15 pb-5"
     >
       <p class="text-xs tracking-widest text-cream/70 uppercase">
         Get in touch
       </p>
-      <svg
-        class="h-7 w-7 opacity-80 sm:h-8 sm:w-8"
-        viewBox="0 0 64 64"
-        aria-hidden="true"
-      >
-        <g
-          stroke="#80C8D8"
-          stroke-width="1.2"
-          fill="none"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path d="M14 32 Q32 22 50 32 Q32 42 14 32 Z"></path>
-          <line x1="19" y1="24" x2="19" y2="18"></line>
-          <line x1="24" y1="22" x2="24" y2="14"></line>
-          <line x1="29" y1="21" x2="29" y2="12"></line>
-          <line x1="35" y1="21" x2="35" y2="12"></line>
-          <line x1="40" y1="22" x2="40" y2="14"></line>
-          <line x1="45" y1="24" x2="45" y2="18"></line>
-          <path d="M27 42 L27 47 L33 47"></path>
-          <path d="M37 42 L37 49"></path>
-        </g>
-        <circle
-          cx="32"
-          cy="32"
-          r="4.5"
-          fill="none"
-          stroke="#80C8D8"
-          stroke-width="1.2"></circle>
-        <circle cx="32" cy="32" r="1.6" fill="#80C8D8"></circle>
-      </svg>
+      <Logo class="h-14 w-14 sm:h-16 sm:w-16" />
     </div>
     <a
       href={`mailto:${site.email}`}

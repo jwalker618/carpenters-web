@@ -1,16 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <circle cx="32" cy="32" r="32" fill="#0F2138"/>
-  <g stroke="#80C8D8" stroke-width="1" fill="none" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M14 32 Q32 22 50 32 Q32 42 14 32 Z"/>
-    <line x1="19" y1="24" x2="19" y2="18"/>
-    <line x1="24" y1="22" x2="24" y2="14"/>
-    <line x1="29" y1="21" x2="29" y2="12"/>
-    <line x1="35" y1="21" x2="35" y2="12"/>
-    <line x1="40" y1="22" x2="40" y2="14"/>
-    <line x1="45" y1="24" x2="45" y2="18"/>
-    <path d="M27 42 L27 47 L33 47"/>
-    <path d="M37 42 L37 49"/>
+  <g fill="#F7F6F3">
+    <path d="M 30 14 L 30 44 L 13 44 Z"/>
+    <path d="M 32 18 L 32 44 L 47 44 Z"/>
+    <rect x="29.5" y="14" width="1" height="32"/>
   </g>
-  <circle cx="32" cy="32" r="4.5" fill="none" stroke="#80C8D8" stroke-width="1"/>
-  <circle cx="32" cy="32" r="1.6" fill="#80C8D8"/>
+  <path d="M 10 48 Q 18 56 32 56 Q 46 56 54 48 L 50 44 L 14 44 Z" fill="#F7F6F3"/>
 </svg>
