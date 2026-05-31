@@ -7,16 +7,10 @@ import { site } from '../site';
 interface Props {
   title?: string;
   description?: string;
-  /** Home uses this so the nav can float over the hero. */
-  transparentNav?: boolean;
 }
 
-const {
-  title,
-  description = site.tagline,
-  transparentNav = false,
-} = Astro.props;
-const pageTitle = title ? `${title} — ${site.name}` : site.name;
+const { title, description = site.tagline } = Astro.props;
+const pageTitle = title ? `${title} — ${site.name}` : `${site.name} — Bespoke Joinery, London`;
 ---
 
 <!doctype html>
@@ -34,54 +28,58 @@ const pageTitle = title ? `${title} — ${site.name}` : site.name;
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,200..500;1,300..400&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
   </head>
-  <body class="flex min-h-screen flex-col">
-    <Header transparent={transparentNav} />
-    <main class:list={['flex-1', transparentNav ? '' : 'pt-20']}>
+  <body>
+    <Header />
+    <main>
       <slot />
     </main>
     <Footer />
 
     <script>
-      // Reveal `.fade-in` elements when they scroll into view.
-      const reveal = new IntersectionObserver(
-        (entries) => {
-          for (const e of entries) {
-            if (e.isIntersecting) {
-              e.target.classList.add('is-visible');
-              reveal.unobserve(e.target);
-            }
-          }
-        },
-        { threshold: 0.12, rootMargin: '0px 0px -40px 0px' },
-      );
-      document
-        .querySelectorAll('.fade-in')
-        .forEach((el) => reveal.observe(el));
+      // Nav solidify + scroll reveals, driven by a single rAF poll so they
+      // work even when 'scroll' events are throttled. The nav goes solid
+      // once past ~72% of the first viewport (i.e. off the hero).
+      const nav = document.getElementById('site-nav');
+      const reveals = Array.from(document.querySelectorAll('.reveal'));
+      const update = () => {
+        const y = window.scrollY || document.documentElement.scrollTop || 0;
+        const vh = window.innerHeight || document.documentElement.clientHeight;
+        nav?.classList.toggle('solid', y > vh * 0.72);
+        for (const el of reveals) {
+          if (el.classList.contains('in')) continue;
+          if (el.getBoundingClientRect().top < vh * 0.92) el.classList.add('in');
+        }
+      };
+      let lastY = -1;
+      const loop = () => {
+        const y = window.scrollY || 0;
+        if (y !== lastY) {
+          lastY = y;
+          update();
+        }
+        requestAnimationFrame(loop);
+      };
+      update();
+      loop();
+      addEventListener('resize', update);
+      // safety: never leave content hidden if something stalls
+      setTimeout(() => reveals.forEach((el) => el.classList.add('in')), 1800);
 
-      // Hero parallax: scrolls the image up at a fraction of scroll speed.
-      const parallaxEl = document.querySelector<HTMLElement>('[data-parallax]');
-      if (
-        parallaxEl &&
-        !matchMedia('(prefers-reduced-motion: reduce)').matches
-      ) {
-        const speed = parseFloat(parallaxEl.dataset.parallax || '0.35');
-        let ticking = false;
-        const onScroll = () => {
-          if (ticking) return;
-          ticking = true;
-          requestAnimationFrame(() => {
-            parallaxEl.style.transform = `translate3d(0, ${window.scrollY * speed}px, 0) scale(1.15)`;
-            ticking = false;
-          });
-        };
-        parallaxEl.style.transform = 'translate3d(0, 0, 0) scale(1.15)';
-        parallaxEl.style.willChange = 'transform';
-        document.addEventListener('scroll', onScroll, { passive: true });
-      }
+      // Mobile menu sheet
+      const sheet = document.getElementById('sheet');
+      document
+        .getElementById('menuBtn')
+        ?.addEventListener('click', () => sheet?.classList.add('open'));
+      document
+        .getElementById('sheetClose')
+        ?.addEventListener('click', () => sheet?.classList.remove('open'));
+      sheet
+        ?.querySelectorAll('[data-close]')
+        .forEach((a) => a.addEventListener('click', () => sheet.classList.remove('open')));
     </script>
   </body>
 </html>
