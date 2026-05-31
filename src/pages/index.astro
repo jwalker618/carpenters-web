@@ -1,255 +1,260 @@
 ---
-import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import ProjectCard from '../components/ProjectCard.astro';
-import BeholdFeed from '../components/BeholdFeed.astro';
-import VideoLoop from '../components/VideoLoop.astro';
+import Gallery from '../components/Gallery.astro';
 import { site } from '../site';
-import hero from '../assets/projects/IMG_5313.JPG';
-import contrastImage from '../assets/projects/IMG_8687.JPEG';
+import heroImg from '../assets/work/IMG_6086.JPEG';
+import compass from '../assets/brand/compass-cyan.png';
+import qr from '../assets/brand/avm-qr.jpg';
 
-const projects = await getCollection('projects');
-
-const featured = projects
-  .filter((p) => p.data.featured)
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, 6);
-
-const testimonials = projects
-  .filter((p) => p.data.testimonial?.quote)
-  .slice(0, 3)
-  .map((p) => p.data.testimonial!);
-
-const services = [
-  {
-    title: 'Tables & seating',
-    body: 'Dining tables, side tables, chairs and benches built to your room and the way you live.',
-  },
-  {
-    title: 'Cabinetry & built-ins',
-    body: 'Kitchens, libraries, wardrobes and alcove shelving — designed to look like furniture, not joinery.',
-  },
-  {
-    title: 'Restoration',
-    body: 'Re-finishing, re-caning and joint repair on heirloom pieces. Cared-for, not made new.',
-  },
-  {
-    title: 'Bespoke commissions',
-    body: 'One-off pieces in wood: from a single shelf to a whole-room fit-out, drawn with you.',
-  },
-];
+const igUrl = `https://instagram.com/${site.instagramHandle}`;
 ---
 
-<BaseLayout transparentNav>
-  <!-- ─── Hero with scroll parallax ─────────────────────────────── -->
-  <section class="relative h-screen min-h-[560px] w-full overflow-hidden">
-    <div class="absolute inset-0">
-      <Image
-        src={hero}
-        alt="Featured carpentry work"
-        widths={[768, 1280, 1920]}
-        sizes="100vw"
-        loading="eager"
-        data-parallax="0.35"
-        class="h-full w-full object-cover"
-      />
-    </div>
-    <div
-      class="absolute inset-0 bg-gradient-to-t from-bark/80 via-bark/20 to-bark/40"
-    >
-    </div>
-    <div class="relative z-10 flex h-full items-end">
-      <div class="mx-auto w-full max-w-6xl px-5 pb-20 sm:pb-28">
-        <p class="text-xs tracking-widest text-cream/80 uppercase">
-          {site.workshopLocation}
-        </p>
-        <h1
-          class="mt-4 max-w-3xl font-serif text-4xl text-cream sm:text-6xl md:text-7xl"
-        >
-          {site.tagline}
-        </h1>
-        <p
-          class="mt-6 max-w-md font-light text-cream/80 italic sm:text-lg"
-        >
-          Made by hand. By appointment, North London.
-        </p>
+<BaseLayout>
+  <!-- ===================== HERO ===================== -->
+  <section class="hero">
+    <Image
+      src={heroImg}
+      alt="Oak-slatted kitchen island with marble worktop"
+      widths={[768, 1280, 1920, 2400]}
+      sizes="100vw"
+      loading="eager"
+    />
+    <div class="hero-in shell pad">
+      <span class="eyebrow">Bespoke joinery · North London</span>
+      <h1>The patience of a <em>master craftsman</em>, brought to the rooms you live in.</h1>
+      <div class="hero-meta">
+        <span>Kitchens</span><span class="dot"></span>
+        <span>Wardrobes</span><span class="dot"></span>
+        <span>Built-ins &amp; furniture</span><span class="dot"></span>
+        <span>By appointment</span>
       </div>
     </div>
+    <div class="scrollcue">Scroll</div>
   </section>
 
-  <!-- ─── Services (numbered) ───────────────────────────────────── -->
-  <section class="mx-auto max-w-6xl px-5 py-24">
-    <div class="fade-in mb-14 max-w-2xl">
-      <p class="text-xs tracking-widest text-forest uppercase">
-        What I make
+  <!-- ===================== INTRO ===================== -->
+  <section class="intro shell pad">
+    <h2 class="reveal">
+      Furniture and fitted joinery, made to be enjoyed for <em>generations.</em>
+    </h2>
+    <div class="aside reveal">
+      <span class="eyebrow">The studio</span>
+      <p>
+        Over thirty years working with wood — from the construction of classic
+        yachts to bespoke interiors across London.
       </p>
-      <h2 class="mt-3 font-serif text-3xl sm:text-4xl md:text-5xl">
-        A small studio. A long list of things I'd happily make for you.
-      </h2>
-    </div>
-    <ol class="grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
-      {
-        services.map((s, i) => (
-          <li class="fade-in">
-            <span class="font-serif text-5xl text-forest/30">
-              {String(i + 1).padStart(2, '0')}
-            </span>
-            <h3 class="mt-3 font-serif text-2xl">{s.title}</h3>
-            <p class="mt-2 text-bark-soft">{s.body}</p>
-          </li>
-        ))
-      }
-    </ol>
-  </section>
-
-  <!-- ─── Selected work ─────────────────────────────────────────── -->
-  <section class="mx-auto max-w-6xl px-5 py-20">
-    <div class="fade-in mb-10 flex items-end justify-between">
-      <h2 class="font-serif text-3xl sm:text-4xl">Selected Work</h2>
-      <a
-        href="/portfolio"
-        class="text-sm tracking-widest text-forest uppercase hover:underline"
-        >View all &rarr;</a
-      >
-    </div>
-    <div class="grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
-      {featured.map((project) => <ProjectCard project={project} />)}
+      <p>
+        Every commission begins with a conversation: how a piece will be lived
+        with, how it should sit naturally within a space, and the atmosphere it
+        should create.
+      </p>
     </div>
   </section>
 
-  <!-- ─── B&W image over warm contrast block ────────────────────── -->
-  <section class="bg-cream">
-    <div class="mx-auto grid max-w-7xl items-stretch md:grid-cols-2">
-      <div
-        class="relative order-2 aspect-[4/5] overflow-hidden md:order-1 md:aspect-auto"
-      >
-        <Image
-          src={contrastImage}
-          alt="Detail of a finished piece"
-          widths={[600, 1000, 1400]}
-          sizes="(max-width: 768px) 100vw, 50vw"
-          class="absolute inset-0 h-full w-full object-cover grayscale contrast-125 brightness-90"
-        />
+  <!-- ===================== WORK ===================== -->
+  <section class="work shell pad" id="work">
+    <div class="shead reveal">
+      <h2>Selected work</h2>
+      <p class="meta">An ongoing record of finished pieces — newest first.</p>
+    </div>
+    <Gallery featureMatch="IMG_2387" exclude={['IMG_6086']} />
+  </section>
+
+  <!-- ===================== SERVICES ===================== -->
+  <section class="services shell pad" id="services">
+    <div class="shead reveal">
+      <h2>A collection of things I'd happily make for you</h2>
+      <p class="meta">Designed collaboratively · made to measure</p>
+    </div>
+
+    <div class="svc-grid">
+      <article class="svc reveal">
+        <span class="n">01</span>
+        <h3>Cabinetry &amp; Built-Ins</h3>
+        <p>
+          Custom kitchens, wardrobes, bathroom furniture and fitted cabinetry —
+          thoughtfully designed to feel integrated, refined and timeless,
+          combining practicality with the character of finely made furniture.
+        </p>
+      </article>
+      <article class="svc reveal">
+        <span class="n">02</span>
+        <h3>Tables &amp; Seating</h3>
+        <p>
+          Bespoke dining benches and occasional tables designed around the
+          proportions of your space and the way you live. Functional, enduring
+          pieces made for everyday use.
+        </p>
+      </article>
+      <article class="svc reveal">
+        <span class="n">03</span>
+        <h3>Bespoke Commissions</h3>
+        <p>
+          Individually designed furniture and interior joinery, from standalone
+          pieces to complete room installations. Every commission is developed
+          collaboratively — work that is both functional and deeply personal.
+        </p>
+      </article>
+    </div>
+
+    <div class="detail-row">
+      <div class="detail reveal">
+        <h4><span class="eyebrow">Craft</span>Bespoke Joinery</h4>
+        <p>
+          High-quality joinery crafted to stand the test of time. From
+          shaker-style doors and custom drawers to handles and finishing
+          details, each element is made to measure with precision workmanship.
+        </p>
       </div>
-      <div
-        class="order-1 flex items-center bg-forest p-10 text-cream md:order-2 md:p-16 lg:p-20"
-      >
-        <div class="fade-in max-w-md">
-          <p class="text-xs tracking-widest text-cream/70 uppercase">
-            The work
+      <div class="detail reveal">
+        <h4><span class="eyebrow">Palette</span>Materials</h4>
+        <p>
+          Wood veneers, bespoke CNC-cut MDF, melamine, reclaimed timber and
+          composite products — achieving both contemporary and traditional
+          finishes to the highest standard.
+        </p>
+      </div>
+      <div class="detail reveal">
+        <h4><span class="eyebrow">Surface</span>Finishes</h4>
+        <p>
+          Spray paint, oil and clear lacquer, applied in collaboration with
+          specialist finishers. Every finish is carefully selected to complement
+          your space and design vision.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PROCESS ===================== -->
+  <section class="process" id="process">
+    <Image class="watermark" src={compass} alt="" widths={[220, 420]} />
+    <div class="process-in shell pad">
+      <div class="shead reveal">
+        <h2>How a piece <em>comes to be</em></h2>
+        <p class="meta">From first conversation to final installation</p>
+      </div>
+      <div class="steps">
+        <div class="step reveal">
+          <span class="k">01</span><h3>Consultation</h3>
+          <p>
+            We begin with a discussion about your ideas, requirements and how the
+            piece will function within the space — understanding the style,
+            practicality and aesthetic you're after.
           </p>
-          <h2 class="mt-4 font-serif text-3xl sm:text-4xl md:text-5xl">
-            Quiet joinery. Patient finishes. Pieces that earn a second life.
-          </h2>
-          <p class="mt-6 text-cream/80">
-            Every commission begins with a conversation about how a piece
-            will be used, and ends with a finish that can be cared for at
-            home — built to be repaired, not replaced.
+        </div>
+        <div class="step reveal">
+          <span class="k">02</span><h3>Concept Design</h3>
+          <p>
+            We prepare initial sketches and design concepts, then refine the
+            design with you until you are completely satisfied before moving
+            forward.
+          </p>
+        </div>
+        <div class="step reveal">
+          <span class="k">03</span><h3>Materials &amp; Estimate</h3>
+          <p>
+            We select materials together — carcass interiors, wood grains,
+            finishes and hardware — then provide a fixed quotation and clear
+            timeline before production begins.
+          </p>
+        </div>
+        <div class="step reveal">
+          <span class="k">04</span><h3>Production</h3>
+          <p>
+            Each component is precision cut, crafted and assembled within the
+            workshop to ensure the highest standards of quality and efficiency
+            prior to installation.
+          </p>
+        </div>
+        <div class="step reveal">
+          <span class="k">05</span><h3>Installation</h3>
+          <p>
+            Your completed joinery is carefully delivered and professionally
+            installed with attention to every detail — a seamless finish, and
+            complete satisfaction.
           </p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ─── Testimonials ──────────────────────────────────────────── -->
-  {
-    testimonials.length > 0 && (
-      <section class="bg-cream-deep/40">
-        <div class="mx-auto max-w-6xl px-5 py-24">
-          <div class="fade-in mb-12 max-w-2xl">
-            <p class="text-xs tracking-widest text-forest uppercase">
-              Kind words
-            </p>
-            <h2 class="mt-3 font-serif text-3xl sm:text-4xl md:text-5xl">
-              From the people who live with the work.
-            </h2>
-          </div>
-          <div class="grid gap-10 md:grid-cols-2 md:gap-14">
-            {testimonials.map((t) => (
-              <blockquote class="fade-in border-l-2 border-forest pl-6">
-                <p class="font-serif text-2xl leading-snug text-bark md:text-3xl">
-                  &ldquo;{t.quote}&rdquo;
-                </p>
-                <footer class="mt-4 text-sm tracking-widest text-bark-soft uppercase">
-                  — {t.attribution}
-                </footer>
-              </blockquote>
-            ))}
-          </div>
-        </div>
-      </section>
-    )
-  }
-
-  <!-- ─── In motion (silent looping clips from finished pieces) ─── -->
-  <section class="mx-auto max-w-6xl px-5 py-24">
-    <div class="fade-in mb-12 max-w-2xl">
-      <p class="text-xs tracking-widest text-forest uppercase">Detail</p>
-      <h2 class="mt-3 font-serif text-3xl italic sm:text-4xl md:text-5xl">
-        In motion.
-      </h2>
-      <p class="mt-4 text-bark-soft">
-        A few seconds at a time — soft-close drawers, brass catching the
-        light, the small movements that don't sit still in a photograph.
-      </p>
+  <!-- ===================== ABOUT ===================== -->
+  <section class="about shell pad" id="about">
+    <div class="col-media">
+      <!-- No portrait of Anne yet: clearly-marked placeholder slot.
+           Replace with <Image> of a workshop photo when supplied. -->
+      <div class="ph reveal"><span>portrait — Anne in the workshop</span></div>
     </div>
-    <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-      <div class="fade-in overflow-hidden">
-        <VideoLoop src="/videos/IMG_2754.mp4" />
+    <div class="reveal">
+      <span class="eyebrow">About Anne</span>
+      <h2>From Amsterdam furniture making to classic yachts — and into your <em>home.</em></h2>
+      <div class="body">
+        <p>
+          Anne van Mansvelt has been working with wood for over thirty years.
+          After studying furniture making in Amsterdam, he moved to the UK to
+          train in traditional wooden boat building at the IBTC in Lowestoft. His
+          early career began in Amsterdam, working across a number of boatyards
+          before establishing his own company specialising in the construction
+          and restoration of classic yachts.
+        </p>
+        <p>
+          Since 2007, Anne has been based in North London, focusing on bespoke
+          interior joinery and architectural woodworking. His work ranges from
+          custom-designed furniture to fully tailored kitchens, bedroom
+          furniture, bathroom cabinetry and fitted interiors — all created for
+          clients seeking craftsmanship, longevity and timeless design.
+        </p>
+        <p>
+          With a deep appreciation for carefully selected materials, Anne
+          combines traditional joinery techniques with refined hand-finishing to
+          create bespoke pieces that feel timeless, functional, and made to be
+          enjoyed for generations.
+        </p>
       </div>
-      <div class="fade-in overflow-hidden">
-        <VideoLoop src="/videos/IMG_5236.mp4" />
-      </div>
-      <div class="fade-in overflow-hidden">
-        <VideoLoop src="/videos/IMG_3665.mp4" />
-      </div>
-      <div class="fade-in overflow-hidden">
-        <VideoLoop src="/videos/IMG_4091.mp4" />
-      </div>
+      <div class="sig"><span class="nm">Anne van Mansvelt</span></div>
     </div>
   </section>
 
-  <!-- ─── From the workshop (Instagram via Behold.so) ───────────── -->
-  <section class="mx-auto max-w-6xl px-5 py-24">
-    <div class="fade-in mb-10 flex flex-wrap items-end justify-between gap-3">
-      <div>
-        <p class="text-xs tracking-widest text-forest uppercase">
-          From the workshop
+  <!-- ===================== CONTACT / INSTAGRAM ===================== -->
+  <section class="contact" id="contact">
+    <div class="contact-in shell pad">
+      <div class="reveal">
+        <span class="eyebrow">See the latest work</span>
+        <h2>It all lives on <em>Instagram.</em></h2>
+        <p class="lede">
+          New pieces are posted as they leave the workshop. Scan the code to
+          follow along — or get in touch to start a commission of your own.
         </p>
-        <h2 class="mt-3 font-serif text-3xl sm:text-4xl">
-          Latest on Instagram
-        </h2>
-      </div>
-      {
-        site.instagramHandle && (
-          <a
-            href={`https://instagram.com/${site.instagramHandle}`}
-            class="text-sm tracking-widest text-forest uppercase hover:underline"
-          >
-            @{site.instagramHandle} &rarr;
+        <div class="lines">
+          <a href={igUrl} target="_blank" rel="noopener">
+            <span class="lab">Instagram</span><span class="val">@{site.instagramHandle}</span>
           </a>
-        )
-      }
-    </div>
-    <div class="fade-in">
-      <BeholdFeed feedId={site.beholdFeedId} />
-    </div>
-  </section>
+          <a href={`mailto:${site.email}`}>
+            <span class="lab">Email</span><span class="val">{site.email}</span>
+          </a>
+          <a href={`tel:${site.phoneIntl}`}>
+            <span class="lab">Telephone</span><span class="val">{site.phone}</span>
+          </a>
+          <div>
+            <span class="lab">Workshop</span><span class="val">{site.workshopLocation}</span>
+          </div>
+        </div>
+      </div>
 
-  <!-- ─── Closing CTA (the big-email footer takes the heavier load) -->
-  <section class="border-t border-cream-deep">
-    <div
-      class="mx-auto flex max-w-6xl flex-col gap-6 px-5 py-16 sm:flex-row sm:items-center sm:justify-between"
-    >
-      <h2 class="fade-in font-serif text-3xl sm:text-4xl">
-        Have a piece in mind?
-      </h2>
-      <a
-        href="/contact"
-        class="fade-in inline-block self-start border border-forest bg-forest px-8 py-3 text-sm tracking-widest text-cream uppercase transition-colors hover:bg-forest-deep"
-        >Get in touch</a
-      >
+      <a class="qr-card reveal" href={igUrl} target="_blank" rel="noopener">
+        <div class="qr-top">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <rect x="3" y="3" width="18" height="18" rx="5"></rect>
+            <circle cx="12" cy="12" r="4"></circle>
+            <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"></circle>
+          </svg>
+          <span>Follow on Instagram</span>
+        </div>
+        <Image class="qrimg" src={qr} alt={`Instagram QR code for @${site.instagramHandle}`} widths={[320, 640]} />
+        <div class="handle">@{site.instagramHandle}</div>
+        <div class="hint">Point your camera at the code</div>
+      </a>
     </div>
   </section>
 </BaseLayout>
